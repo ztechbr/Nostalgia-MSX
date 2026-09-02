@@ -1,0 +1,3 @@
+[submodule "DATAGAME_Modern_Python"]
+	path = DATAGAME_Modern_Python
+	url = https://github.com/ztechbr/videotexto-cliente.git

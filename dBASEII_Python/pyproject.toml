@@ -1,0 +1,7 @@
+[project]
+name = "dbase2py"
+version = "1.0.0"
+description = "Native Python reimplementation of dBASE II 2.4 behavior and DBF storage"
+requires-python = ">=3.10"
+[project.scripts]
+dbase2py = "dbase2py.cli:main"
