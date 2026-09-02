@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Nostalgia Platoon{% endblock %}
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center px-4 text-center gap-8">
+  <div class="space-y-3">
+    <p class="text-msx-yellow text-xs sm:text-sm tracking-widest">MSX ADVENTURE - 1968</p>
+    <h1 class="text-3xl sm:text-5xl text-msx-red drop-shadow-[4px_4px_0_rgba(0,0,0,0.8)] leading-relaxed">
+      NOSTALGIA<br />PLATOON
+    </h1>
+    <p class="text-msx-cyan text-[10px] sm:text-xs max-w-md mx-auto leading-loose">
+      Um tributo em texto e pixels aos clássicos jogos de aventura de MSX.
+      Sobreviva à selva. Encontre a extração.
+    </p>
+  </div>
+
+  <pre class="text-msx-green text-[8px] sm:text-xs leading-tight select-none">
+      _______
+     /  ___  \
+    | /     \ |    .-=-.-=-.-=-.
+    ||  o o  ||   /  SELVA  1968 \
+    | \  ^  / |   '-=-.-=-.-=-.-'
+     \  '-'  /
+      \_____/
+  </pre>
+
+  <form action="{{ url_for('novo_jogo') }}" method="post">
+    <button type="submit"
+      class="pixel-border border-msx-yellow bg-msx-dark-green text-msx-white px-6 py-4 text-xs sm:text-sm
+             hover:bg-msx-green active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+      INICIAR MISSÃO
+    </button>
+  </form>
+
+  <p class="text-msx-gray text-[9px] max-w-sm mx-auto leading-loose">
+    Comandos de texto: norte, sul, leste, oeste, pegar, usar, atacar, fugir, falar, olhar, ajuda.
+  </p>
+</div>
+{% endblock %}

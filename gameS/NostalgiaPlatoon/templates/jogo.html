@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Nostalgia Platoon - {{ hud.sala_nome }}{% endblock %}
+{% block content %}
+<div class="min-h-screen p-3 sm:p-6 flex flex-col lg:flex-row gap-4 max-w-6xl mx-auto">
+
+  <!-- HUD -->
+  <aside class="lg:w-72 shrink-0 space-y-4">
+    <div class="pixel-border border-msx-cyan bg-msx-dark-blue/40 p-3 space-y-2">
+      <p class="text-msx-yellow text-[10px]">{{ hud.sala_nome | upper }}</p>
+
+      <div class="space-y-1">
+        <p class="text-[9px] text-msx-white">HP {{ hud.hp }}/{{ hud.hp_max }}</p>
+        <div class="hp-bar-track h-3 w-full bg-msx-black pixel-border border-msx-white p-0.5">
+          <div class="h-full
+            {% if hud.hp_pct > 50 %}bg-msx-green{% elif hud.hp_pct > 20 %}bg-msx-yellow{% else %}bg-msx-red{% endif %}"
+            style="width: {{ hud.hp_pct }}%"></div>
+        </div>
+      </div>
+
+      {% if hud.em_combate %}
+        <p class="text-msx-red text-[10px] animate-pulse">!! EM COMBATE !!</p>
+      {% endif %}
+    </div>
+
+    {% if not hud.em_combate and not hud.fim %}
+    <div class="pixel-border border-msx-green bg-msx-dark-green/30 p-3">
+      <p class="text-[9px] text-msx-yellow mb-2">SAÍDAS</p>
+      <div class="flex flex-wrap gap-2">
+        {% for direcao in hud.exits %}
+        <form action="{{ url_for('acao') }}" method="post">
+          <input type="hidden" name="comando" value="{{ direcao }}" />
+          <button type="submit"
+            class="pixel-border border-msx-white bg-msx-black text-msx-cyan px-2 py-1 text-[9px]
+                   hover:bg-msx-dark-blue">{{ direcao | upper }}</button>
+        </form>
+        {% else %}
+        <p class="text-[9px] text-msx-gray">nenhuma</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="pixel-border border-msx-magenta bg-black/40 p-3">
+      <p class="text-[9px] text-msx-yellow mb-2">INVENTÁRIO</p>
+      {% if hud.inventario %}
+        <ul class="text-[9px] text-msx-white space-y-1 list-disc list-inside">
+          {% for item in hud.inventario %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-[9px] text-msx-gray">vazio</p>
+      {% endif %}
+    </div>
+
+    {% if not hud.em_combate and not hud.fim %}
+    <div class="grid grid-cols-2 gap-2">
+      <form action="{{ url_for('acao') }}" method="post">
+        <input type="hidden" name="comando" value="olhar" />
+        <button class="w-full pixel-border border-msx-white bg-msx-black text-msx-cyan px-2 py-2 text-[9px] hover:bg-msx-dark-blue">OLHAR</button>
+      </form>
+      <form action="{{ url_for('acao') }}" method="post">
+        <input type="hidden" name="comando" value="falar" />
+        <button class="w-full pixel-border border-msx-white bg-msx-black text-msx-cyan px-2 py-2 text-[9px] hover:bg-msx-dark-blue">FALAR</button>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if hud.em_combate %}
+    <div class="grid grid-cols-2 gap-2">
+      <form action="{{ url_for('acao') }}" method="post">
+        <input type="hidden" name="comando" value="atacar" />
+        <button class="w-full pixel-border border-msx-red bg-msx-black text-msx-red px-2 py-2 text-[9px] hover:bg-msx-dark-blue">ATACAR</button>
+      </form>
+      <form action="{{ url_for('acao') }}" method="post">
+        <input type="hidden" name="comando" value="fugir" />
+        <button class="w-full pixel-border border-msx-yellow bg-msx-black text-msx-yellow px-2 py-2 text-[9px] hover:bg-msx-dark-blue">FUGIR</button>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if hud.fim %}
+    <form action="{{ url_for('novo_jogo') }}" method="post">
+      <button class="w-full pixel-border border-msx-yellow bg-msx-dark-green text-msx-white px-2 py-3 text-[10px] hover:bg-msx-green">
+        NOVA MISSÃO
+      </button>
+    </form>
+    {% endif %}
+  </aside>
+
+  <!-- Terminal -->
+  <main class="flex-1 flex flex-col pixel-border border-msx-white bg-black/60 p-3 sm:p-4 min-h-[70vh]">
+    <div id="terminal" class="flex-1 overflow-y-auto space-y-1 text-[10px] sm:text-xs leading-relaxed pr-1">
+      {% for linha in log %}
+        <p class="min-h-[1em] whitespace-pre-wrap {% if linha.startswith('>') %}text-msx-yellow{% elif linha.startswith('==') %}text-msx-cyan{% elif '***' in linha %}text-msx-red{% else %}text-msx-light-green{% endif %}">{{ linha }}</p>
+      {% endfor %}
+    </div>
+
+    {% if not hud.fim %}
+    <form action="{{ url_for('acao') }}" method="post" class="mt-3 flex items-center gap-2 border-t-2 border-msx-green pt-3">
+      <span class="text-msx-yellow text-xs">&gt;</span>
+      <input
+        type="text"
+        name="comando"
+        autocomplete="off"
+        autofocus
+        placeholder="digite um comando..."
+        class="flex-1 bg-transparent border-none outline-none text-msx-white text-[10px] sm:text-xs placeholder:text-msx-gray"
+      />
+      <button type="submit" class="pixel-border border-msx-cyan bg-msx-dark-blue text-msx-white px-3 py-1 text-[9px] hover:bg-msx-blue">
+        ENVIAR
+      </button>
+    </form>
+    {% endif %}
+  </main>
+</div>
+
+<script>
+  var terminal = document.getElementById("terminal");
+  if (terminal) { terminal.scrollTop = terminal.scrollHeight; }
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Node
+node_modules/
+
+# Flask instance/session data
+instance/
+flask_session/
+
+# Editor/tooling
+.claude/
+*.wav
